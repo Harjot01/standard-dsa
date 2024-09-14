@@ -31,14 +31,57 @@ public:
 		}
 	}
 
+	void bfs(int s, int V, vector<bool> &visited)
+	{
+		visited[s] = true;
+		queue<int> q;
+		q.push(s);
+
+		while(!q.empty())
+		{
+			int curr = q.front();
+			q.pop();
+			cout << curr << " ";
+
+			for(int i = 0; i < V; ++i)
+			{
+				if(adjMatrix[curr][i] == 1 && !visited[i])
+				{
+					visited[i] = true;
+					q.push(i);
+				}
+			}
+
+
+		}
+	}
+
+	void bfsDisconnectedGraph()
+	{
+		vector<bool> visited(adjMatrix.size(), false);
+
+		for(int i = 0; i < adjMatrix.size(); ++i)
+		{
+			if(!visited[i])
+				bfs(i, adjMatrix.size(), visited);
+		}
+	}
+
 	void display()
 	{
-		for(auto &row : adjMatrix)
-		{
-			for(auto &val : row)
-				cout<<val<<" ";
-			cout<<endl;
-		}
+		cout << "Adjacency Matrix:" << endl;
+        for (int i = 0; i < adjMatrix.size(); ++i)
+        {
+            cout << "Node " << i << ":";
+           
+            for (auto &val : adjMatrix[i])
+            {
+	            cout << " -> " << val;
+            }
+            
+            cout << endl;
+        }
+        cout<<endl;
 	}
 
 };
@@ -47,7 +90,8 @@ int main()
 {
 	// Implement a graph using adjacency matrix
 
-	Graph g(5);
+	int V = 5;
+	Graph g(V);
 	g.addEdge(0, 1);
 	g.addEdge(0, 4);
 	g.addEdge(4, 1);
@@ -56,9 +100,11 @@ int main()
 	g.addEdge(1, 2);
 	g.addEdge(3, 2);
 
-	g.removeEdge(4, 3);
-
+	vector<bool> visited(V, false);
 	g.display();
+
+	g.bfsDisconnectedGraph();
+
 
 
 
